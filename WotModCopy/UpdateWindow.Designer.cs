@@ -1,4 +1,4 @@
-﻿namespace ReplayTemplate
+﻿namespace WotModCopy
 {
     partial class UpdateWindow
     {

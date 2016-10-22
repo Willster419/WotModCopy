@@ -1,2 +1,2 @@
-Alpha 1:
-Basic prof of concept
+Alpha 2:
+Test of updater

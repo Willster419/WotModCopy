@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ReplayTemplate
+namespace WotModCopy
 {
     public partial class PleaseWait : Form
     {
