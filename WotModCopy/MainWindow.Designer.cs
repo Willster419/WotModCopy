@@ -31,6 +31,8 @@
             this.selectedProfileLabel = new System.Windows.Forms.Label();
             this.selectedProfileDescLabel = new System.Windows.Forms.Label();
             this.selectedProfilePanel = new System.Windows.Forms.Panel();
+            this.updateSelectedProfileButton = new System.Windows.Forms.Button();
+            this.updateOtherProfileButton = new System.Windows.Forms.Button();
             this.selectedProfileNameLabel = new System.Windows.Forms.Label();
             this.selectedProfilePathLabel = new System.Windows.Forms.Label();
             this.selectProfileButton = new System.Windows.Forms.Button();
@@ -54,6 +56,7 @@
             this.authorLabel = new System.Windows.Forms.Label();
             this.WotResModsBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.resetSettings = new System.Windows.Forms.CheckBox();
+            this.checkActiveProfileButton = new System.Windows.Forms.Button();
             this.selectedProfilePanel.SuspendLayout();
             this.activeProfilePanel.SuspendLayout();
             this.detectedTanksFolderPanel.SuspendLayout();
@@ -64,7 +67,7 @@
             // 
             this.selectedProfileLabel.AutoSize = true;
             this.selectedProfileLabel.Location = new System.Drawing.Point(3, 10);
-            this.selectedProfileLabel.Name = "SelectedProfileLabel";
+            this.selectedProfileLabel.Name = "selectedProfileLabel";
             this.selectedProfileLabel.Size = new System.Drawing.Size(81, 13);
             this.selectedProfileLabel.TabIndex = 0;
             this.selectedProfileLabel.Text = "Selected Profile";
@@ -81,6 +84,8 @@
             // selectedProfilePanel
             // 
             this.selectedProfilePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.selectedProfilePanel.Controls.Add(this.updateSelectedProfileButton);
+            this.selectedProfilePanel.Controls.Add(this.updateOtherProfileButton);
             this.selectedProfilePanel.Controls.Add(this.selectedProfileNameLabel);
             this.selectedProfilePanel.Controls.Add(this.selectedProfilePathLabel);
             this.selectedProfilePanel.Controls.Add(this.selectProfileButton);
@@ -90,6 +95,26 @@
             this.selectedProfilePanel.Name = "selectedProfilePanel";
             this.selectedProfilePanel.Size = new System.Drawing.Size(472, 79);
             this.selectedProfilePanel.TabIndex = 2;
+            // 
+            // updateSelectedProfileButton
+            // 
+            this.updateSelectedProfileButton.Location = new System.Drawing.Point(332, 52);
+            this.updateSelectedProfileButton.Name = "updateSelectedProfileButton";
+            this.updateSelectedProfileButton.Size = new System.Drawing.Size(135, 23);
+            this.updateSelectedProfileButton.TabIndex = 5;
+            this.updateSelectedProfileButton.Text = "update selected profile...";
+            this.updateSelectedProfileButton.UseVisualStyleBackColor = true;
+            this.updateSelectedProfileButton.Click += new System.EventHandler(this.updateSelectedProfileButton_Click);
+            // 
+            // updateOtherProfileButton
+            // 
+            this.updateOtherProfileButton.Location = new System.Drawing.Point(332, 28);
+            this.updateOtherProfileButton.Name = "updateOtherProfileButton";
+            this.updateOtherProfileButton.Size = new System.Drawing.Size(135, 23);
+            this.updateOtherProfileButton.TabIndex = 5;
+            this.updateOtherProfileButton.Text = "update other profile..";
+            this.updateOtherProfileButton.UseVisualStyleBackColor = true;
+            this.updateOtherProfileButton.Click += new System.EventHandler(this.updateOtherProfileButton_Click);
             // 
             // selectedProfileNameLabel
             // 
@@ -111,9 +136,9 @@
             // 
             // selectProfileButton
             // 
-            this.selectProfileButton.Location = new System.Drawing.Point(342, 24);
+            this.selectProfileButton.Location = new System.Drawing.Point(332, 3);
             this.selectProfileButton.Name = "selectProfileButton";
-            this.selectProfileButton.Size = new System.Drawing.Size(125, 23);
+            this.selectProfileButton.Size = new System.Drawing.Size(135, 23);
             this.selectProfileButton.TabIndex = 2;
             this.selectProfileButton.Text = "select different profile...";
             this.selectProfileButton.UseVisualStyleBackColor = true;
@@ -122,6 +147,7 @@
             // activeProfilePanel
             // 
             this.activeProfilePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.activeProfilePanel.Controls.Add(this.checkActiveProfileButton);
             this.activeProfilePanel.Controls.Add(this.activeProfileNameLabel);
             this.activeProfilePanel.Controls.Add(this.createProfileButton);
             this.activeProfilePanel.Controls.Add(this.activeProfilePathLabel);
@@ -144,11 +170,11 @@
             // 
             // createProfileButton
             // 
-            this.createProfileButton.Location = new System.Drawing.Point(378, 4);
+            this.createProfileButton.Location = new System.Drawing.Point(319, 4);
             this.createProfileButton.Name = "createProfileButton";
-            this.createProfileButton.Size = new System.Drawing.Size(89, 23);
+            this.createProfileButton.Size = new System.Drawing.Size(148, 23);
             this.createProfileButton.TabIndex = 11;
-            this.createProfileButton.Text = "create profile...";
+            this.createProfileButton.Text = "create new profile...";
             this.createProfileButton.UseVisualStyleBackColor = true;
             this.createProfileButton.Click += new System.EventHandler(this.createProfileButton_Click);
             // 
@@ -163,7 +189,7 @@
             // 
             // activateProfileButton
             // 
-            this.activateProfileButton.Location = new System.Drawing.Point(319, 28);
+            this.activateProfileButton.Location = new System.Drawing.Point(319, 33);
             this.activateProfileButton.Name = "activateProfileButton";
             this.activateProfileButton.Size = new System.Drawing.Size(148, 23);
             this.activateProfileButton.TabIndex = 2;
@@ -185,9 +211,9 @@
             this.activeProfileLabel.AutoSize = true;
             this.activeProfileLabel.Location = new System.Drawing.Point(3, 9);
             this.activeProfileLabel.Name = "activeProfileLabel";
-            this.activeProfileLabel.Size = new System.Drawing.Size(113, 13);
+            this.activeProfileLabel.Size = new System.Drawing.Size(69, 13);
             this.activeProfileLabel.TabIndex = 0;
-            this.activeProfileLabel.Text = "Currently Active Profile";
+            this.activeProfileLabel.Text = "Active Profile";
             // 
             // statusLabel
             // 
@@ -301,6 +327,16 @@
             this.resetSettings.Text = "reset settings on exit";
             this.resetSettings.UseVisualStyleBackColor = true;
             // 
+            // checkActiveProfileButton
+            // 
+            this.checkActiveProfileButton.Location = new System.Drawing.Point(319, 62);
+            this.checkActiveProfileButton.Name = "checkActiveProfileButton";
+            this.checkActiveProfileButton.Size = new System.Drawing.Size(148, 23);
+            this.checkActiveProfileButton.TabIndex = 13;
+            this.checkActiveProfileButton.Text = "check for active profile...";
+            this.checkActiveProfileButton.UseVisualStyleBackColor = true;
+            this.checkActiveProfileButton.Click += new System.EventHandler(this.checkActiveProfileButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,6 +395,9 @@
         private System.Windows.Forms.Label selectedProfileNameLabel;
         private System.Windows.Forms.Label activeProfileNameLabel;
         private System.Windows.Forms.CheckBox resetSettings;
+        private System.Windows.Forms.Button updateSelectedProfileButton;
+        private System.Windows.Forms.Button updateOtherProfileButton;
+        private System.Windows.Forms.Button checkActiveProfileButton;
     }
 }
 

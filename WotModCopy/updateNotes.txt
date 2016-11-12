@@ -1,2 +1,6 @@
-Alpha 2:
-Test of updater
+Alpha 3:
+-Added method to update currently selected
+profile OR update another profile
+-fixed handling of incorrect/corrupt
+settings on startup
+-fixed UI bugs

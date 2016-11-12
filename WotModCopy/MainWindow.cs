@@ -15,7 +15,7 @@ namespace WotModCopy
 {
     public partial class MainWindow : Form
     {
-        private string version = "Alpha 2";
+        private string version = "Alpha 3";
         private PleaseWait wait;
         private UpdateWindow uw;
         private ProfileInfo pInfo;
@@ -59,6 +59,7 @@ namespace WotModCopy
                 this.Close();
                 return;
             }
+
             ///////////////////////////////////////////////////////////
             //comment out the line below for debug
             File.WriteAllText(lockFile, "lockFile. do not delete");
@@ -159,17 +160,18 @@ namespace WotModCopy
                 MessageBox.Show("currently copying, please wait...");
                 return;
             }
-            Application.DoEvents();
             statusInfoLabel.Text = "Deleting current res_mods install...";
             Application.DoEvents();
             if (profileName == null || profileDesc == null)
             {
                 MessageBox.Show("no profile selected");
+                statusInfoLabel.Text = "Idle";
                 return;
             }
             if (tanksModsPath == null)
             {
                 MessageBox.Show("tanks path is null");
+                statusInfoLabel.Text = "Idle";
                 return;
             }
             Directory.Delete(tanksModsPath, true);
@@ -281,6 +283,7 @@ namespace WotModCopy
                     File.Delete(profileFile);
                 }
                 File.WriteAllText(profileFile, sb.ToString());
+                File.WriteAllText(tanksModsPath + "\\profileInfo.wotprofile", sb.ToString());
 
                 activeProfileNameLabel.Text = profileName;
                 selectedProfileNameLabel.Text = profileName;
@@ -288,7 +291,7 @@ namespace WotModCopy
                 activeProfileDescLabel.Text = profileDesc;
                 selectedProfileDescLabel.Text = profileDesc;
 
-                activeProfilePathLabel.Text = profilePath;
+                activeProfilePathLabel.Text = tanksModsPath;
                 activeProfileLabel.ForeColor = Color.DarkGreen;
 
                 selectedProfilePathLabel.Text = profilePath;
@@ -316,7 +319,7 @@ namespace WotModCopy
                             break;
                     }
                 }
-                activeProfilePathLabel.Text = profilePath;
+                activeProfilePathLabel.Text = tanksModsPath;
                 activeProfileLabel.ForeColor = Color.DarkGreen;
             }
         }
@@ -446,7 +449,12 @@ namespace WotModCopy
             }
             if (!File.Exists(profileFile))
             {
-                MessageBox.Show("Selected folder is not a profile");
+                if (!fromLoad) MessageBox.Show("Selected folder is not a profile");
+                if (fromLoad)
+                {
+                    resetSettings.Checked = true;
+                    Application.Restart();
+                }
                 return;
             }
             string temp = File.ReadAllText(profileFile);
@@ -498,11 +506,7 @@ namespace WotModCopy
             statusInfoLabel.Text = "Creating Profile...";
             profilePath = WotResModsBrowser.SelectedPath;
             profileFile = profilePath + "\\profileInfo.wotprofile";
-            
             this.copy(tanksModsPath, profilePath);
-
-
-            
         }
 
         private int copy(string sourceFolder, string destFolder)
@@ -559,6 +563,166 @@ namespace WotModCopy
                     getNumFiles(subdir.FullName, temppath, copySubDirs);
                 }
             }
+        }
+
+        private void updateSelectedProfileButton_Click(object sender, EventArgs e)
+        {
+            //check for tanks folder and selected profile path
+            //check selected profile is same as active profile
+            if (tanksModsPath == null)
+            {
+                MessageBox.Show("you must have your tanks folder selected\nbefore you can create a profile");
+                return;
+            }
+            if (profilePath == null)
+            {
+                MessageBox.Show("profile path is null");
+                return;
+            }
+            string temp = File.ReadAllText(tanksModsPath + "\\profileInfo.wotprofile");
+            string[] stringArray = temp.Split('\n');
+            foreach (string s in stringArray)
+            {
+                string[] anotherArray = s.Split('=');
+                switch (anotherArray[0])
+                {
+                    case "profileName":
+                        if (profileName != anotherArray[1])
+                        {
+                            MessageBox.Show("Selected Profile is not the same as active profile\nupdate aborted");
+                            statusInfoLabel.Text = "Idle";
+                            return;
+                        }
+                        break;
+
+                    case "profileDesc":
+                        if (profileDesc != anotherArray[1])
+                        {
+                            MessageBox.Show("Selected Profile is not the same as active profile\nupdate aborted");
+                            statusInfoLabel.Text = "Idle";
+                            return;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            profileFile = profilePath + "\\profileInfo.wotprofile";
+            Directory.Delete(profilePath, true);
+            if (!Directory.Exists(profilePath)) Directory.CreateDirectory(profilePath);
+            this.copy(tanksModsPath, profilePath);
+        }
+
+        private void updateOtherProfileButton_Click(object sender, EventArgs e)
+        {
+            string tempProfileName = "";
+            string tempProfileDesc = "";
+            string tempPath = "";
+            string tempFile = "";
+            WotResModsBrowser.ShowNewFolderButton = false;
+            WotResModsBrowser.Description = "Select Profile to update";
+            if (WotResModsBrowser.ShowDialog() == DialogResult.Cancel)
+            {
+                statusInfoLabel.Text = "cancled";
+                return;
+            }
+            statusInfoLabel.Text = "Updating Profile...";
+            tempPath = WotResModsBrowser.SelectedPath;
+            if (tanksModsPath == null)
+            {
+                MessageBox.Show("you must have your tanks folder selected\nbefore you can create a profile");
+                return;
+            }
+            
+            tempFile = tempPath + "\\profileInfo.wotprofile";
+            string temp = File.ReadAllText(tempFile);
+            string[] stringArray = temp.Split('\n');
+            foreach (string s in stringArray)
+            {
+                string[] anotherArray = s.Split('=');
+                switch (anotherArray[0])
+                {
+                    case "profileName":
+                        tempProfileName = anotherArray[1];
+                        break;
+
+                    case "profileDesc":
+                        tempProfileDesc = anotherArray[1];
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            temp = File.ReadAllText(tanksModsPath + "\\profileInfo.wotprofile");
+            stringArray = temp.Split('\n');
+            foreach (string s in stringArray)
+            {
+                string[] anotherArray = s.Split('=');
+                switch (anotherArray[0])
+                {
+                    case "profileName":
+                        if (tempProfileName != anotherArray[1])
+                        {
+                            MessageBox.Show("Selected Profile is not the same as active profile\nupdate aborted");
+                            statusInfoLabel.Text = "Idle";
+                            return;
+                        }
+                        break;
+
+                    case "profileDesc":
+                        if (tempProfileDesc != anotherArray[1])
+                        {
+                            MessageBox.Show("Selected Profile is not the same as active profile\nupdate aborted");
+                            statusInfoLabel.Text = "Idle";
+                            return;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            tempFile = tempPath + "\\profileInfo.wotprofile";
+            Directory.Delete(tempPath, true);
+            if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
+            this.copy(tanksModsPath, tempPath);
+        }
+
+        private void checkActiveProfileButton_Click(object sender, EventArgs e)
+        {
+            if (tanksModsPath == null)
+            {
+                MessageBox.Show("atnks mods folder must be selected first");
+                return;
+            }
+            if (!File.Exists(tanksModsPath + "\\profileInfo.wotprofile"))
+            {
+                activeProfileNameLabel.Text = "No profile active";
+                return;
+            }
+            string temp = File.ReadAllText(tanksModsPath + "\\profileInfo.wotprofile");
+            string[] stringArray = temp.Split('\n');
+            foreach (string s in stringArray)
+            {
+                string[] anotherArray = s.Split('=');
+                switch (anotherArray[0])
+                {
+                    case "profileName":
+                        activeProfileNameLabel.Text = anotherArray[1];
+                        break;
+
+                    case "profileDesc":
+                        activeProfileDescLabel.Text = anotherArray[1];
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            activeProfilePathLabel.Text = tanksModsPath;
+            activeProfileLabel.ForeColor = Color.DarkGreen;
         }
     }
 }
