@@ -15,7 +15,7 @@ namespace WotModCopy
 {
     public partial class MainWindow : Form
     {
-        private string version = "Alpha 3";
+        private string version = "Alpha 4";
         private PleaseWait wait;
         private UpdateWindow uw;
         private ProfileInfo pInfo;
@@ -101,9 +101,10 @@ namespace WotModCopy
                 uw = new UpdateWindow();
                 if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
                 //download version.txt
+                //"http://willster419.atwebpages.com/Applications/"
                 try
                 {
-                    client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/WotModCopy/version.txt", tempPath + "\\version.txt");
+                    client.DownloadFile("http://willster419.atwebpages.com/Applications/WotModCopy/version.txt", tempPath + "\\version.txt");
                 }
                 catch (WebException)
                 {
@@ -118,7 +119,7 @@ namespace WotModCopy
                 else
                 {
                     //download updateNotes.txt
-                    client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/WotModCopy/updateNotes.txt", tempPath + "\\updateNotes.txt");
+                    client.DownloadFile("http://willster419.atwebpages.com/Applications/WotModCopy/updateNotes.txt", tempPath + "\\updateNotes.txt");
                     //prompt user
                     uw.updateNotesRTB.Text = File.ReadAllText(tempPath + "\\updateNotes.txt");
                     uw.updateAvailableLabel.Text = "An update is available: " + newVersion;
@@ -127,7 +128,7 @@ namespace WotModCopy
                     {
                         //download new version
                         string temp = Path.GetFullPath(Application.StartupPath);
-                        client.DownloadFile("https://dl.dropboxusercontent.com/u/44191620/WotModCopy/WotModCopy.exe", temp + "\\WotModCopy version" + newVersion + ".exe");
+                        client.DownloadFile("http://willster419.atwebpages.com/Applications/WotModCopy/WotModCopy.exe", temp + "\\WotModCopy version" + newVersion + ".exe");
                         //open new one
                         try
                         {

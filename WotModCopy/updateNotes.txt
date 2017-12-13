@@ -1,3 +1,6 @@
+Alpha 4:
+-Updated URL links
+
 Alpha 3:
 -Added method to update currently selected
 profile OR update another profile
